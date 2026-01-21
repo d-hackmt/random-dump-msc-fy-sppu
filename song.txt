@@ -1,0 +1,79 @@
+CREATE CONSTRAINT artist_name IF NOT EXISTS
+FOR (a:Artist) REQUIRE a.name IS UNIQUE;
+
+CREATE CONSTRAINT song_id IF NOT EXISTS
+FOR (s:Song) REQUIRE s.song_id IS UNIQUE;
+
+CREATE CONSTRAINT user_id IF NOT EXISTS
+FOR (u:User) REQUIRE u.user_id IS UNIQUE;
+
+
+CREATE
+(a1:Artist {name: "Arijit Singh", country: "India"}),
+(a2:Artist {name: "Taylor Swift", country: "USA"}),
+(a3:Artist {name: "Ed Sheeran", country: "UK"});
+
+
+CREATE
+(g1:Genre {name: "Pop"}),
+(g2:Genre {name: "Romantic"}),
+(g3:Genre {name: "Indie"});
+
+CREATE
+(al1:Album {title: "Bollywood Hits", year: 2022}),
+(al2:Album {title: "Midnights", year: 2023}),
+(al3:Album {title: "Divide", year: 2017});
+
+
+MATCH 
+(a1:Artist {name:"Arijit Singh"}),
+(a2:Artist {name:"Taylor Swift"}),
+(a3:Artist {name:"Ed Sheeran"}),
+(al1:Album {title:"Bollywood Hits"}),
+(al2:Album {title:"Midnights"}),
+(al3:Album {title:"Divide"}),
+(g1:Genre {name:"Pop"}),
+(g2:Genre {name:"Romantic"}),
+(g3:Genre {name:"Indie"})
+
+CREATE
+(s1:Song {song_id: "S1", title:"Kesariya", duration: 280}),
+(s2:Song {song_id: "S2", title:"Anti-Hero", duration: 245}),
+(s3:Song {song_id: "S3", title:"Shape of You", duration: 260}),
+
+(a1)-[:CREATED]->(s1),
+(a2)-[:CREATED]->(s2),
+(a3)-[:CREATED]->(s3),
+
+(s1)-[:IN_ALBUM]->(al1),
+(s2)-[:IN_ALBUM]->(al2),
+(s3)-[:IN_ALBUM]->(al3),
+
+(s1)-[:HAS_GENRE]->(g2),
+(s2)-[:HAS_GENRE]->(g1),
+(s3)-[:HAS_GENRE]->(g3);
+
+
+
+CREATE
+(u1:User {user_id:"U1", name:"Rahul", age:21}),
+(u2:User {user_id:"U2", name:"Ananya", age:20}),
+(u3:User {user_id:"U3", name:"John", age:23});
+
+
+
+MATCH
+(u1:User {name:"Rahul"}),
+(u2:User {name:"Ananya"}),
+(u3:User {name:"John"}),
+(s1:Song {title:"Kesariya"}),
+(s2:Song {title:"Anti-Hero"}),
+(s3:Song {title:"Shape of You"}),
+(a1:Artist {name:"Arijit Singh"})
+
+CREATE
+(u1)-[:LISTENS_TO {times:50}]->(s1),
+(u1)-[:LISTENS_TO {times:20}]->(s3),
+(u2)-[:LISTENS_TO {times:40}]->(s2),
+(u3)-[:LISTENS_TO {times:60}]->(s3),
+(u1)-[:FOLLOWS]->(a1);
